@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>La Fortuna — Trip Companion</title>
+<meta name="description" content="Family trip companion for La Fortuna, Costa Rica">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌋</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== INSTRUMENT STRIP ===== -->
+<header class="instrument-strip" id="instrumentStrip">
+  <div class="instrument-strip__inner">
+    <div class="gauge" id="gaugeTime">
+      <span class="gauge__label">La Fortuna</span>
+      <span class="gauge__value" id="localTime">--:--</span>
+      <span class="gauge__sub" id="localDate">—</span>
+    </div>
+    <div class="gauge" id="gaugeWeather">
+      <span class="gauge__label">Sky</span>
+      <span class="gauge__value" id="weatherTemp">--°</span>
+      <span class="gauge__sub" id="weatherDesc">loading…</span>
+    </div>
+    <div class="gauge" id="gaugeFx">
+      <span class="gauge__label">₡1 USD =</span>
+      <span class="gauge__value" id="fxRate">—</span>
+      <span class="gauge__sub">colones</span>
+    </div>
+    <div class="gauge gauge--countdown" id="gaugeCountdown">
+      <span class="gauge__label" id="countdownLabel">Trip status</span>
+      <span class="gauge__value" id="countdownValue">—</span>
+      <span class="gauge__sub" id="countdownSub">—</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== CONVERTER (collapsible, tucked under strip) ===== -->
+<div class="converter" id="converterPanel">
+  <button class="converter__toggle" id="converterToggle" aria-expanded="false">
+    <span>Quick currency converter</span>
+    <svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 5l5 5 5-5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="converter__body" id="converterBody">
+    <div class="converter__row">
+      <div class="converter__field">
+        <label for="usdInput">USD</label>
+        <input type="number" id="usdInput" inputmode="decimal" placeholder="20" value="20">
+      </div>
+      <span class="converter__eq">=</span>
+      <div class="converter__field">
+        <label for="crcInput">CRC (₡)</label>
+        <input type="number" id="crcInput" inputmode="decimal" placeholder="9,000">
+      </div>
+    </div>
+    <p class="converter__hint">Most La Fortuna spots take cards; sodas, tips &amp; small snacks are cash-friendlier. Keep some ₡5,000–10,000 notes on hand.</p>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main id="mainContent">
+
+  <!-- ---------- TODAY ---------- -->
+  <section class="view" id="view-today" data-view="today">
+    <div class="section-head">
+      <span class="eyebrow">Right now</span>
+      <h1>Today</h1>
+    </div>
+    <div id="todayCard" class="today-card"><!-- injected --></div>
+
+    <div class="section-head section-head--tight">
+      <span class="eyebrow">This trip</span>
+      <h2>At a glance</h2>
+    </div>
+    <div class="glance-grid">
+      <div class="glance-card">
+        <span class="glance-card__num">4</span>
+        <span class="glance-card__label">days</span>
+      </div>
+      <div class="glance-card">
+        <span class="glance-card__num">👶</span>
+        <span class="glance-card__label">toddler paced</span>
+      </div>
+      <div class="glance-card">
+        <span class="glance-card__num">🌋</span>
+        <span class="glance-card__label">Los Lagos Resort</span>
+      </div>
+      <div class="glance-card">
+        <span class="glance-card__num" id="glancePacked">0/0</span>
+        <span class="glance-card__label">packed</span>
+      </div>
+    </div>
+
+    <div class="section-head section-head--tight">
+      <span class="eyebrow">Heads up</span>
+      <h2>Notes we checked twice</h2>
+    </div>
+    <div class="callout-stack" id="calloutStack"><!-- injected --></div>
+  </section>
+
+  <!-- ---------- ITINERARY ---------- -->
+  <section class="view" id="view-itinerary" data-view="itinerary" hidden>
+    <div class="section-head">
+      <span class="eyebrow">Aug 26 – 29</span>
+      <h1>Itinerary</h1>
+    </div>
+    <div class="day-tabs" id="dayTabs"><!-- injected --></div>
+    <div id="dayDetail"><!-- injected --></div>
+  </section>
+
+  <!-- ---------- FOOD ---------- -->
+  <section class="view" id="view-food" data-view="food" hidden>
+    <div class="section-head">
+      <span class="eyebrow">Eat well, chill hard</span>
+      <h1>Food guide</h1>
+    </div>
+    <div class="filter-row" id="foodFilters"><!-- injected --></div>
+    <div class="food-grid" id="foodGrid"><!-- injected --></div>
+  </section>
+
+  <!-- ---------- PACK ---------- -->
+  <section class="view" id="view-pack" data-view="pack" hidden>
+    <div class="section-head">
+      <span class="eyebrow">Before you zip the bag</span>
+      <h1>Packing checklist</h1>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar"><div class="progress-bar__fill" id="packProgressFill"></div></div>
+      <span class="progress-bar__text" id="packProgressText">0 of 0 packed</span>
+    </div>
+    <div id="packList"><!-- injected --></div>
+  </section>
+
+  <!-- ---------- JOURNAL ---------- -->
+  <section class="view" id="view-journal" data-view="journal" hidden>
+    <div class="section-head">
+      <span class="eyebrow">No typing needed</span>
+      <h1>Trip journal</h1>
+    </div>
+    <div class="day-tabs" id="journalDayTabs"><!-- injected --></div>
+    <div id="journalDetail"><!-- injected --></div>
+  </section>
+
+  <!-- ---------- INFO ---------- -->
+  <section class="view" id="view-info" data-view="info" hidden>
+    <div class="section-head">
+      <span class="eyebrow">Good to know</span>
+      <h1>Trip info</h1>
+    </div>
+    <div id="infoContent"><!-- injected --></div>
+  </section>
+
+</main>
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="tab-bar" id="tabBar">
+  <button class="tab-bar__item is-active" data-view="today">
+    <span class="tab-bar__icon">◎</span><span>Today</span>
+  </button>
+  <button class="tab-bar__item" data-view="itinerary">
+    <span class="tab-bar__icon">🗺</span><span>Plan</span>
+  </button>
+  <button class="tab-bar__item" data-view="food">
+    <span class="tab-bar__icon">🍽</span><span>Food</span>
+  </button>
+  <button class="tab-bar__item" data-view="pack">
+    <span class="tab-bar__icon">🎒</span><span>Pack</span>
+  </button>
+  <button class="tab-bar__item" data-view="journal">
+    <span class="tab-bar__icon">📓</span><span>Journal</span>
+  </button>
+  <button class="tab-bar__item" data-view="info">
+    <span class="tab-bar__icon">ⓘ</span><span>Info</span>
+  </button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script src="data/trip-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
